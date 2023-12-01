@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Http\Requests\CreatePostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -49,7 +50,37 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        //
+        if(!$post = Post::find($id))
+        {
+            return response()->json([
+                'message' => 'Tópico não encontrado'
+            ], 404);
+        }
+
+        return response()->json($post);
+    }
+
+    public function getComments($id)
+    {
+        if(!$post = Post::find($id))
+        {
+            return response()->json([
+                'message' => 'Tópico não encontrado'
+            ], 404);
+        }
+
+        $content = Comment::where('post_id', $id)
+                            ->with('user')
+                            ->paginate(10)
+                            ->toArray();
+
+        return response()->json([
+            'comments' => $content['data'],
+            'paginate' => [
+                'current_page' => $content['current_page'],
+                'total' => $content['total'],
+            ]
+        ]);
     }
 
     /**
@@ -96,6 +127,6 @@ class PostController extends Controller
                 'message' => 'Você não tem permissão para alterar este tópico'
             ]);
         }
-        
+
     }
 }
