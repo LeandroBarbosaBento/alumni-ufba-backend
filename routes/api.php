@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BugController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -35,11 +37,20 @@ Route::group([
     Route::post('create-account', [UserController::class, 'create']);
 });
 
-Route::group([
-    'middleware' => 'api',
-    'prefix' => 'post'
-], function ($router) {
-    Route::post('create', [PostController::class, 'create']);
-});
+Route::middleware('auth:api')->group(function () {
+    Route::prefix('post')->group(function(){
+        Route::post('create', [PostController::class, 'create']);
+        Route::post('{id}', [PostController::class, 'update']);
+        Route::delete('{id}', [PostController::class, 'destroy']);
+        Route::get('{id}', [PostController::class, 'show']);
+        Route::get('{id}/comments', [PostController::class, 'getComments']);
+    });
 
-Route::resource('post', 'App\Http\Controllers\PostController');
+    Route::prefix('category')->group(function(){
+        Route::get('/', [CategoryController::class, 'get']);
+    });
+
+    Route::prefix('bug')->group(function(){
+        Route::post('/create', [BugController::class, 'create']);
+    });
+});
