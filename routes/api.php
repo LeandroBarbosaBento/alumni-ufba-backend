@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BugController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -53,4 +54,11 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('bug')->group(function(){
         Route::post('/create', [BugController::class, 'create']);
     });
+
+    Route::prefix('events')->group(function(){
+        Route::post('/', [EventController::class, 'create']);
+        Route::post('{id}', [EventController::class, 'update']);
+        Route::delete('{id}', [EventController::class, 'destroy']);
+    });
+
 });
