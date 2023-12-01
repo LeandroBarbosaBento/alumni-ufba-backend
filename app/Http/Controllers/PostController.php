@@ -78,7 +78,7 @@ class PostController extends Controller
             'comments' => $content['data'],
             'paginate' => [
                 'current_page' => $content['current_page'],
-                'total' => $content['total'],
+                'last_page' => $content['last_page'],
             ]
         ]);
     }

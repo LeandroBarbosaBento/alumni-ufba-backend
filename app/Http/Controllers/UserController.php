@@ -30,4 +30,16 @@ class UserController extends Controller
             'message' => 'Usuário cadastrado com sucesso',
         ]);
     }
+
+    public function get()
+    {
+        $content = User::paginate(15)->toArray();
+        return response()->json([
+            'users' => $content['data'],
+            'paginate' => [
+                'current_page' => $content['current_page'],
+                'last_page' => $content['last_page'],
+            ]
+        ]);
+    }
 }

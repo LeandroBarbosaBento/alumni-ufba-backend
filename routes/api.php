@@ -20,10 +20,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::get('/', function () {
     return response()->json(['api' => 'alumni-api']);
 });
@@ -58,7 +54,12 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('events')->group(function(){
         Route::post('/', [EventController::class, 'create']);
         Route::post('{id}', [EventController::class, 'update']);
+        Route::get('{id}', [EventController::class, 'show']);
         Route::delete('{id}', [EventController::class, 'destroy']);
+    });
+
+    Route::prefix('users')->group(function(){
+        Route::get('/', [UserController::class, 'get']);
     });
 
 });

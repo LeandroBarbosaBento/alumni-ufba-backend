@@ -52,7 +52,14 @@ class EventController extends Controller
      */
     public function show(string $id)
     {
-        //
+        if(!$event = Event::find($id))
+        {
+            return response()->json([
+                'message' => 'Evento não encontrado'
+            ], 404);
+        }
+
+        return response()->json($event);
     }
 
     /**
@@ -75,7 +82,13 @@ class EventController extends Controller
             'description' => 'required',
         ]);
 
-        $event = Event::find($id);
+        if(!$event = Event::find($id))
+        {
+            return response()->json([
+                'message' => 'Evento não encontrado'
+            ], 404);
+        }
+
         $event->title = $request->input('title');
         $event->date = $request->input('date');
         $event->where = $request->input('where');
@@ -93,7 +106,12 @@ class EventController extends Controller
      */
     public function destroy(string $id)
     {
-        $event = Event::find($id);
+        if(!$event = Event::find($id))
+        {
+            return response()->json([
+                'message' => 'Evento não encontrado'
+            ], 404);
+        }
 
         if (Auth::check() && $event->user_id === Auth::id()) {
             $event->delete();
