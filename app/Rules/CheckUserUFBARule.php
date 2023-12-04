@@ -20,7 +20,7 @@ class CheckUserUFBARule implements ValidationRule
         }
     }
 
-    public function checkUserUFBA()
+    public function checkUserUFBA($value)
     {
         return true;
     }
